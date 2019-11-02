@@ -35,7 +35,5 @@ dataDaily <- read_csv("data/HackathonDataDaily.csv", col_names = dataHeaders)
 dataHourly1 <- read_csv("data/HackathonDataHourly1of2.csv", col_names = dataHeaders)
 dataHourly2 <- read_csv("data/HackathonDataHourly1of2.csv", col_names = dataHeaders)
 dataHourly <- rbind(dataHourly1, dataHourly2)
-
-
-data.frame()
-ggplot(dataDaily, aes(x = CurrentValue, y = Time)) + geom_point()
+rm(dataHourly1)
+rm(dataHourly2)

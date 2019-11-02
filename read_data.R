@@ -3,7 +3,7 @@ library(sp)
 library(rgdal)
 
 
-dataHeaders <- c("MeterID", "CurrentValue", "ValueString", "Time", "BuildingName", "Units", "Status", "StatusCode")
+dataHeaders <- c("MeterID", "CurrentValue", "ValueString", "Time", "Description", "Units", "Status", "StatusCode")
 # MeterID |              Meter identifier, will have a match in the config file
 # CurrentValue |         Most precise measurement value
 # ValueString |          Less precise measurement value
@@ -11,7 +11,7 @@ dataHeaders <- c("MeterID", "CurrentValue", "ValueString", "Time", "BuildingName
 # Status |               Sometimes meters malfunction, this indicates if this measurement is OK or UNRELIABLE
 # StatusCode |           Numeric representation of status
 
-configHeaders <- c("BuildingID", "MeterID", "Description", "Units", "Resource", "BuildingName", "GrossSquareFeet", "BuildDate", "Latitude", "Longitude", "Campus", "Organization", "LocationType", "SteamSourceID", "ChilledWaterSourceID", "HotWaterSourceID", "Time")
+configHeaders <- c("BuildingID", "MeterID", "Description", "Units", "Resource", "BuildingName", "GrossSquareFeet", "BuildDate", "Latitude", "Longitude", "Campus", "Organization", "LocationType", "SteamSourceID", "ChilledWaterSourceID", "HotWaterSourceID", "TrackDate")
 # MeterID |              Meter identifier, will have a match in the config file
 # Description |          Description of what the meter is measuring
 # Units |                Unit of measurement for this meter
@@ -30,10 +30,18 @@ configHeaders <- c("BuildingID", "MeterID", "Description", "Units", "Resource", 
 # HotWaterSourceID |     BuildingID representing the source of hot water of this building (1)
 
 
-config <- read_csv("data/HackathonConfig.csv",col_names = configHeaders)
-dataDaily <- read_csv("data/HackathonDataDaily.csv", col_names = dataHeaders)
-dataHourly1 <- read_csv("data/HackathonDataHourly1of2.csv", col_names = dataHeaders)
-dataHourly2 <- read_csv("data/HackathonDataHourly1of2.csv", col_names = dataHeaders)
-dataHourly <- rbind(dataHourly1, dataHourly2)
-rm(dataHourly1)
-rm(dataHourly2)
+config <- read_csv("data/HackathonConfig.csv",col_names = configHeaders, col_types = "fcffffdDddffffffT")
+config$Resource <- factor(config$Resource)
+
+dataDaily <- read_csv("data/HackathonDataDaily.csv", col_names = dataHeaders, col_types = "fdcTfffn")
+dataDaily <- dataDaily %>%
+  filter(Status == "OK")
+dataDaily$Units[dataDaily$Units == "KWH"] <- "kWh"
+
+# dataHourly1 <- read_csv("data/HackathonDataHourly1of2.csv", col_names = dataHeaders)
+# dataHourly2 <- read_csv("data/HackathonDataHourly1of2.csv", col_names = dataHeaders)
+# dataHourly <- rbind(dataHourly1, dataHourly2)
+# rm(dataHourly1)
+# rm(dataHourly2)
+
+

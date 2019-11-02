@@ -25,15 +25,14 @@ shinyServer(function(input, output, session){
       addMarkers(lng=config$Longitude, lat=config$Latitude, popup=config$BuildingName, layerId = config$BuildingID)
   })
   
-  output$building_graph_ui <- renderUI({
+  output$building_graph_ui <- renderPlot({
     if (is.null(input$map_marker_click$id )) {
       return()
     }
-    print("Rendering new graph")
+    # print("Rendering new graph")
     data <- diffData %>% filter(BuildingID == input$map_marker_click$id)
-    print(data)
-    #p <- ggplot(data, aes(x = Time, y = Diff, color = Description.x)) + geom_point()
-    plot(data.frame(x = c(1,2,3), y=c(1,2,3)))
+    # print(data)
+    ggplot(data, aes(x = Time, y = Diff, color = Description.x)) + geom_point()
     # return(plotOutput())
     # 
     #   ggplotly(p)

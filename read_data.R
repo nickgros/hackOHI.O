@@ -30,12 +30,14 @@ configHeaders <- c("BuildingID", "MeterID", "Description", "Units", "Resource", 
 # HotWaterSourceID |     BuildingID representing the source of hot water of this building (1)
 
 
-config <- read_csv("data/HackathonConfig.csv",col_names = configHeaders, col_types = "fcffffdDddffffffT")
-config$Resource <- factor(config$Resource)
+config <- read_csv("data/HackathonConfig.csv",col_names = configHeaders, col_types = "ffffffdDddffffffT")
+config <- config[!is.na(config$Longitude) & config$Longitude != 0,]
+
 
 dataDaily <- read_csv("data/HackathonDataDaily.csv", col_names = dataHeaders, col_types = "fdcTfffn")
 dataDaily <- dataDaily %>%
-  filter(Status == "OK")
+  filter(Status == "OK") %>% 
+  filter(CurrentValue > 0)
 dataDaily$Units[dataDaily$Units == "KWH"] <- "kWh"
 
 # dataHourly1 <- read_csv("data/HackathonDataHourly1of2.csv", col_names = dataHeaders)

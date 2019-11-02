@@ -5,13 +5,17 @@ shinyUI(fluidPage(
   tabsetPanel(
     type = "tabs",
     tabPanel(
-      "Cool stuff"
-    ),
-    tabPanel(
-      "Cooler stuff"
-    ),
-    tabPanel(
-      "MAPZ"
+      "Mapz",
+      sidebarLayout(
+        sidebarPanel(
+          hr()
+        ),
+        mainPanel(
+          leafletOutput("map"),
+          plotOutput("building_graph_ui")
+        )
+      )
+      
     )
   )
 ))
